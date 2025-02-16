@@ -6,6 +6,7 @@ softdepend: [SuperVanish, PlaceholderAPI, CarbonChat, Towny, HuskTowns, Placehol
 
 main: ${projectEntry}
 api-version: 1.13
+folia-supported: true
 
 permissions:
   commandprompter.reload:

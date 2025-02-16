@@ -31,6 +31,7 @@ import com.cyr1en.commandprompter.prompt.PromptManager;
 import com.cyr1en.commandprompter.prompt.PromptParser;
 import com.cyr1en.commandprompter.util.ServerUtil;
 import com.cyr1en.commandprompter.util.unsafe.PvtFieldMutator;
+import fr.euphyllia.energie.model.SchedulerType;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
@@ -162,7 +163,7 @@ public class ChatPrompt extends AbstractPrompt {
                     .setSender(player)
                     .setContent(msg).build();
 
-            Bukkit.getScheduler().runTask(plugin, () -> manager.processPrompt(ctx));
+            plugin.getScheduler().runTask(SchedulerType.SYNC, taskInter -> manager.processPrompt(ctx));
         }
     }
 

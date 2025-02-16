@@ -6,6 +6,7 @@ import com.cyr1en.commandprompter.api.Dispatcher;
 import com.cyr1en.commandprompter.api.prompt.Prompt;
 import com.cyr1en.commandprompter.util.MMUtil;
 import com.cyr1en.kiso.utils.SRegex;
+import fr.euphyllia.energie.model.SchedulerType;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -115,7 +116,7 @@ public class PromptQueue extends LinkedList<Prompt> {
                     return;
 
                 if (pcm.delayTicks() > 0)
-                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> execPCM(pcm, sender),
+                    plugin.getScheduler().runDelayed(SchedulerType.SYNC, task -> execPCM(pcm, sender),
                             pcm.delayTicks());
                 else
                     execPCM(pcm, sender);

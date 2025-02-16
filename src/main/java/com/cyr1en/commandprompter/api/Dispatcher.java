@@ -25,11 +25,11 @@
 package com.cyr1en.commandprompter.api;
 
 import com.cyr1en.commandprompter.CommandPrompter;
+import fr.euphyllia.energie.model.SchedulerType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -53,11 +53,9 @@ public class Dispatcher {
      */
     public static void dispatchCommand(Plugin plugin, Player sender, String command) {
         final String checked = command.codePointAt(0) == 0x2F ? command : "/" + command;
-        new BukkitRunnable() {
-            public void run() {
-                sender.chat(checked);
-            }
-        }.runTask(plugin);
+        CommandPrompter.getInstance().getScheduler().runTask(SchedulerType.SYNC, task -> {
+            sender.chat(checked);
+        });
     }
 
     /**
@@ -67,11 +65,9 @@ public class Dispatcher {
      */
     public static void dispatchConsole(final String command) {
         final String checked = command.codePointAt(0) == 0x2F ? command.substring(1) : command;
-        new BukkitRunnable() {
-            public void run() {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), checked);
-            }
-        }.runTask(CommandPrompter.getInstance());
+        CommandPrompter.getInstance().getScheduler().runTask(SchedulerType.SYNC, task -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), checked);
+        });
     }
 
     /**
@@ -103,7 +99,9 @@ public class Dispatcher {
         }
         attachment.getPermissible().recalculatePermissions();
         final String checked = command.codePointAt(0) == 0x2F ? command.substring(1) : command;
-        Bukkit.dispatchCommand(sender, checked);
+        CommandPrompter.getInstance().getScheduler().runTask(SchedulerType.SYNC, task -> {
+            Bukkit.dispatchCommand(sender, checked);
+        });
         //dispatchCommand(plugin, sender, command);
         sender.removeAttachment(attachment);
     }

@@ -39,6 +39,9 @@ import com.cyr1en.commandprompter.util.ServerUtil;
 import com.cyr1en.kiso.mc.I18N;
 import com.cyr1en.kiso.mc.UpdateChecker;
 import com.cyr1en.kiso.utils.SRegex;
+import fr.euphyllia.energie.Energie;
+import fr.euphyllia.energie.model.Scheduler;
+import fr.euphyllia.energie.model.SchedulerType;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -64,9 +67,12 @@ public class CommandPrompter extends JavaPlugin {
     private PluginMessenger messenger;
     private HeadCache headCache;
     private CommandAPIWrapper commandAPIWrapper;
+    private Scheduler scheduler;
 
     @Override
     public void onEnable() {
+
+        scheduler = new Energie(this).getMinecraftScheduler();
 
         new Metrics(this, 5359);
         setupConfig();
@@ -90,7 +96,7 @@ public class CommandPrompter extends JavaPlugin {
         instance = this;
         Bukkit.getPluginManager().registerEvents(new CommandSendListener(this), this);
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
+        scheduler.runDelayed(SchedulerType.SYNC, task -> {
             hookContainer = new HookContainer(this);
             hookContainer.initHooks();
             headCache.registerFilters();
@@ -144,7 +150,7 @@ public class CommandPrompter extends JavaPlugin {
         updateChecker = new UpdateChecker(this, 47772);
         if (updateChecker.isDisabled())
             return;
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(this, () -> {
+        scheduler.runTask(SchedulerType.ASYNC, task -> {
             if (updateChecker.newVersionAvailable())
                 logger.info(SRegex.ANSI_GREEN + "A new update is available! (" +
                         updateChecker.getCurrVersion().asString() + ")" + SRegex.ANSI_RESET);
@@ -209,5 +215,9 @@ public class CommandPrompter extends JavaPlugin {
 
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
+    }
+
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 }

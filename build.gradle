@@ -33,7 +33,7 @@ compileTestJava.options.encoding = "UTF-8"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -73,6 +73,7 @@ dependencies {
     implementation "net.kyori:adventure-text-minimessage:4.17.0"
     implementation "dev.jorel:commandapi-bukkit-shade:9.7.0"
     implementation 'de.rapha149.signgui:signgui:2.5.0'
+    implementation 'com.github.Euphillya:Energie:1.2.0'
 
     compileOnly 'me.clip:placeholderapi:2.11.6'
     compileOnly "net.kyori:adventure-text-serializer-legacy:4.17.0"
